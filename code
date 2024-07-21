@@ -1,0 +1,52 @@
+class Solution {
+public:
+
+ //function to insert element in a clone linkedlist
+    void insertattail(Node* &head, Node* &tail, int data){
+        Node *add=new Node(data);
+        if(head==NULL){
+            head=add;
+            tail=add;
+        }
+        else{
+            tail->next=add;
+            tail=add;
+        }
+    }
+    
+    
+    Node* copyRandomList(Node* head) {
+        //step 1
+        //create a clone list by copying nodes from original list;
+        Node *clonehead=NULL;
+        Node *clonetail=NULL;
+        Node *temp=head;
+        while(temp){
+            insertattail(clonehead,clonetail,temp->val);
+            temp=temp->next;
+        }
+        
+        //step2
+        //create mapping of clone ll with original ll
+        map<Node*,Node*>old_to_new;
+        Node *original=head;
+        Node *clone=clonehead;
+        while(original){
+            old_to_new[original]=clone;
+            original=original->next;
+            clone=clone->next;
+        }
+        
+        //step 3
+        //now we need to process the random pointer
+        original=head;
+        clone=clonehead;
+        while(original){
+            clone->random=old_to_new[original->random];
+             original=original->next;
+            clone=clone->next;
+        }
+        
+        return clonehead;
+    }
+};
